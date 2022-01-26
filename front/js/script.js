@@ -4,31 +4,25 @@ const items = document.getElementById('items');
 
 async function loadData() {
     const response = await fetch(apiURL);
-    if(!response.ok) {
+    if (!response.ok) {
         throw new Error(`Erreur HTTP ! statut : ${response.status}`);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
-loadData().then(products => {
-    products.forEach(product => {
-        items.innerHTML += showProduct(product);
-    });
-})
-
-// fetch(apiURL)
-//     .then(response => response.json())
-//     .then(products => {
-//         products.forEach(product => {
-//             items.innerHTML += showProduct(product);
-//         });
-//     })
-//     .catch(err => console.log(err));
+loadData()
+    .then(products => {
+        let productCards = [];
+        products.forEach(product => {
+            productCards.push(getProductCard(product));
+        })
+        items.innerHTML = productCards.join('');
+    })
+    .catch(e => console.log(e))
 
 // affiche un produit sur la page
 
-const showProduct = product => {
+const getProductCard = product => {
     return `
     <a href="./product.html?id=${product._id}">
         <article>
