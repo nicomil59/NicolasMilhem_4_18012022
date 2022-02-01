@@ -1,28 +1,6 @@
-const apiURL = 'http://localhost:3000/api/products';
+// crée le template d'une card représentant un produit
 
-const items = document.getElementById('items');
-
-async function loadData() {
-    const response = await fetch(apiURL);
-    if (!response.ok) {
-        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-    }
-    return await response.json();
-}
-
-loadData()
-    .then(products => {
-        let productCards = [];
-        products.forEach(product => {
-            productCards.push(getProductCard(product));
-        })
-        items.innerHTML = productCards.join('');
-    })
-    .catch(e => console.log(e))
-
-// affiche un produit sur la page
-
-const getProductCard = product => {
+function createProductCard(product) {
     return `
     <a href="./product.html?id=${product._id}">
         <article>
@@ -32,4 +10,43 @@ const getProductCard = product => {
         </article>
     </a>
     `;
-};
+}
+
+// affiche l'ensemble des produits
+
+function displayProducts(products) {
+
+    let html = '';
+    products.forEach(product => {
+        html += createProductCard(product);
+    });
+
+    document.getElementById('items').innerHTML = html;
+}
+
+// récupère les produits et les affiche
+
+// loadAPI(urlAPI)
+//     .then(products => {
+//         console.log(products);
+//         displayProducts(products);
+//     })
+//     .catch(err => {
+//         alert("Problème avec l'API");
+//         console.log(err);
+//     })
+
+async function getAllProducts() {
+    try {
+        let products = await loadAPI(urlAPI);
+        displayProducts(products)
+    } catch (err) {
+        alert("Problème avec l'API");
+        console.log(err);
+    }
+}
+
+getAllProducts();
+
+
+
