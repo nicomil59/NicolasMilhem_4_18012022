@@ -39,7 +39,7 @@ function displayProducts(products) {
 async function getAllProducts() {
     try {
         let products = await loadAPI(urlAPI);
-        displayProducts(products)
+        displayProducts(products);
     } catch (err) {
         alert("Problème avec l'API");
         console.log(err);

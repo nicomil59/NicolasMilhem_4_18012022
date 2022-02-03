@@ -1,15 +1,21 @@
-// if (!localStorage.getItem('cart')) {
-//     localStorage.setItem('cart', JSON.stringify([]));
-// } 
+// récupère liste des produits depuis LocalStorage
+const getProductsFromLocalStorage = () => {
+    
+    let result = [];
+    
+    // s'il y a la clé 'cart', retourne le tableau des produits
+    // sinon renvoyer tableau vide
 
-// récupère données depuis LocalStorage
-const getDataFromLocalStorage = key => {
-    return JSON.parse(localStorage.getItem(key));
+    if(isKeyInLocalStorage('cart')) {
+        result = JSON.parse(localStorage.getItem('cart'));
+    }
+    
+    return result;
 }
 
 // met à jour ou crée données dans LocalStorage
-const updateDataInLocalStorage = (key, data) => {
-    localStorage.setItem(key, JSON.stringify(data));
+const setProductsInLocalStorage = data => {
+    localStorage.setItem('cart', JSON.stringify(data));
 }
 
 // vérifie si clé existe dans LocalStorage
