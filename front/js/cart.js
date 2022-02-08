@@ -38,6 +38,9 @@ const displayCart = storedProducts => {
         console.log('items', items);
 
         getTotal(items);
+        
+        
+         
 
         // gestion de la modification de la quantité d'un article dans le panier
 
@@ -48,6 +51,8 @@ const displayCart = storedProducts => {
 
                 if (isQuantityValid(quantity)) {
                     
+                    isCartQuantityValid = true;
+
                     // recherche de l'index de l'article pour lequel on modifie la quantité
                     let id = article.dataset.id;
                     let color = article.dataset.color;
@@ -67,8 +72,11 @@ const displayCart = storedProducts => {
                     
                     alert("Panier mis à jour");
 
+                    
+
                 } else {
                     alert("Veuillez choisir un nombre d'article(s) entre 1 et 100");
+                    isCartQuantityValid = false;
                 }
 
                 
@@ -98,6 +106,7 @@ const displayCart = storedProducts => {
 
 // on affiche le contenu du panier à partir des produits stockés dans le LocalStorage
 
+let isCartQuantityValid = true; 
 displayCart(getProductsFromLocalStorage());
 
 // on vérifie si le panier existe dans le localStorage
@@ -187,8 +196,50 @@ const deleteArticle = (article, items, storedProducts) => {
     setProductsInLocalStorage(storedProducts);
 }
 
+// gestion du formulaire de commande
+
+document.querySelector('form').addEventListener('submit', e => {
+
+    e.preventDefault();
+
+    if(isCartValid()) {
+        
+        console.log('panier valide');
+
+        const contact = getContact();
+        console.log(contact);
+
+        if(validateContact(contact)) {
+            console.log('*** formulaire valide ***');
+
+            const products = getProductsFromLocalStorage().map(product => product.id);
+            console.log(products);
 
 
+
+        } else {
+            console.log('!!!!!!!!! formulaire pas valide !!!!!!!!!');
+        }
+
+
+    } else {
+        console.log('panier pas valide');
+    }
+
+
+});
+
+const getContact = () => {
+
+    return {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName : document.getElementById('lastName').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        email: document.getElementById('email').value.trim()
+    }
+
+}
 
 
 
