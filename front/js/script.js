@@ -26,16 +26,6 @@ function displayProducts(products) {
 
 // récupère les produits et les affiche
 
-// loadAPI(urlAPI)
-//     .then(products => {
-//         console.log(products);
-//         displayProducts(products);
-//     })
-//     .catch(err => {
-//         alert("Problème avec l'API");
-//         console.log(err);
-//     })
-
 async function getAllProducts() {
     try {
         let products = await loadAPI(urlAPI);

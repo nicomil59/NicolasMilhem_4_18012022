@@ -6,15 +6,32 @@ async function loadAPI(url) {
 
     let res = await fetch(url);
 
-    if(res.ok) {
+    if (res.ok) {
         return await res.json();
     } else {
         throw new Error(`Erreur HTTP ! statut : ${res.status}`);
     }
 }
 
+// effectue requête POST sur l'API
 
+async function postAPI(url, data) {
 
+    const options = {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+    
+    let res = await fetch(url, options);
 
+    if (res.ok) {
+        return await res.json();
+    } else {
+        throw new Error(`Erreur HTTP ! statut : ${res.status}`);
+    }
 
-
+}

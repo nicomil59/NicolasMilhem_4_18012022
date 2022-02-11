@@ -20,8 +20,7 @@ const isCartValid = () => {
 
     let result = true;
     
-    let totalQuantity = parseInt(document.getElementById('totalQuantity').textContent);
-    // console.log('totalQuantity',totalQuantity);   
+    const totalQuantity = parseInt(document.getElementById('totalQuantity').textContent);
 
     if(totalQuantity === 0) {
         alert('Votre panier est vide !');
@@ -37,60 +36,76 @@ const isCartValid = () => {
 
 }
 
-// valide le données entrées dans le formulaire
+// teste les données entrées dans le formulaire
 
 const validateContact = contact => {
 
-    if(testReg(contact.firstName, regName)) {
-        console.log('Prénom ok');
-        document.getElementById('firstNameErrorMsg').textContent = "";
+    let result = true;
+    
+    // document.getElementById('firstNameErrorMsg').textContent = isInputValid(contact.firstName, regName) ? "" : "Veuillez renseigner un prénom au bon format";
+
+    // document.getElementById('lastNameErrorMsg').textContent = isInputValid(contact.lastName, regName) ? "" : "Veuillez renseigner un nom de famille au bon format";
+
+    // document.getElementById('addressErrorMsg').textContent = isInputValid(contact.address, regAddress) ? "" : "Veuillez renseigner une adresse au bon format";
+
+    // document.getElementById('cityErrorMsg').textContent = isInputValid(contact.city, regName) ? "" : "Veuillez renseigner une ville au bon format";
+
+    // document.getElementById('emailErrorMsg').textContent = isInputValid(contact.email, regEmail) ? "" : "Veuillez renseigner une adresse email au bon format";
+
+    // return isInputValid(contact.firstName, regName) && isInputValid(contact.lastName, regName) && isInputValid(contact.address, regAddress) && isInputValid(contact.city, regName) && isInputValid(contact.email, regEmail); 
+
+    
+    const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
+    if(isInputValid(contact.firstName, regName)) {
+        firstNameErrorMsg.textContent = "";
     } else {
-        console.log('***veuillez corriger le prénom !');
-        document.getElementById('firstNameErrorMsg').textContent = "Veuillez renseigner un prénom au bon format";
+        firstNameErrorMsg.textContent = "Veuillez renseigner un prénom au bon format";
+        result = false;
     }
 
-    if(testReg(contact.lastName, regName)) {
-        console.log('Nom ok');
-        document.getElementById('lastNameErrorMsg').textContent = "";
+    const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
+    if(isInputValid(contact.lastName, regName)) {
+        lastNameErrorMsg.textContent = "";
     } else {
-        console.log('***veuillez corriger le nom !');
-        document.getElementById('lastNameErrorMsg').textContent = "Veuillez renseigner un nom au bon format";
+        lastNameErrorMsg.textContent = "Veuillez renseigner un nom au bon format";
+        result = false;
+    }
+    
+    const addressErrorMsg = document.getElementById('addressErrorMsg');
+    if(isInputValid(contact.address, regAddress)) {
+        addressErrorMsg.textContent = "";
+    } else {
+        addressErrorMsg.textContent = "Veuillez renseigner une adresse au bon format";
+        result = false;
     }
 
-    if(testReg(contact.address, regAddress)) {
-        console.log('Adresse ok');
-        document.getElementById('addressErrorMsg').textContent = "";
+    const cityErrorMsg = document.getElementById('cityErrorMsg');
+    if(isInputValid(contact.city, regName)) {
+        cityErrorMsg.textContent = "";
     } else {
-        console.log("***Veuillez corriger l'adresse");
-        document.getElementById('addressErrorMsg').textContent = "Veuillez renseigner une adresse au bon format";
+        cityErrorMsg.textContent = "Veuillez renseigner une ville au bon format";
+        result = false;
     }
 
-    if(testReg(contact.city, regName)) {
-        console.log('Ville ok');
-        document.getElementById('cityErrorMsg').textContent = "";
+    const emailErrorMsg = document.getElementById('emailErrorMsg');
+    if(isInputValid(contact.email, regEmail)) {
+        emailErrorMsg.textContent = "";
     } else {
-        console.log('***veuillez corriger la ville !');
-        document.getElementById('cityErrorMsg').textContent = "Veuillez renseigner une ville au bon format";
+        emailErrorMsg.textContent = "Veuillez entrer une adresse email au bon format";
+        result = false;
     }
 
-    if(testReg(contact.email, regEmail)) {
-        console.log('Email ok');
-        document.getElementById('emailErrorMsg').textContent = "";
-    } else {
-        console.log("***Veuillez corriger l'Email");
-        document.getElementById('emailErrorMsg').textContent = "Veuillez entrer une adresse email au bon format";
-    }
-
-    return testReg(contact.firstName, regName) && testReg(contact.lastName, regName) && testReg(contact.address, regAddress) && testReg(contact.city, regName) && testReg(contact.email, regEmail);
-
+    return result;
 
 }
 
 // teste une valeur entrée dans le formulaire au moyen d'une expression régulière
 
-const testReg = (value, reg) => {
+const isInputValid = (value, reg) => {
     return reg.test(value);
 }
+
+// expressions régulières pour tester les champs du forumulaire
 
 const regName = /^[a-z\éèàêâîiïù\-' ]{1,30}$/i;
 

@@ -5,18 +5,12 @@ const displayCart = storedProducts => {
     getProductsFromAPI()
         .then(productsFromAPI => {
 
-        console.log('productsFromAPI', productsFromAPI);
-
         let html = '';
         let items = [];
 
         storedProducts.forEach(storedProduct => {
             
-            // console.log(storedProduct.id);
-
             let productData = productsFromAPI.find(productfromAPI => productfromAPI._id ===  storedProduct.id);
-            // console.log(productData);
-            
 
             const item = {
                 id: storedProduct.id,
@@ -35,12 +29,7 @@ const displayCart = storedProducts => {
 
         });
         
-        console.log('items', items);
-
         getTotal(items);
-        
-        
-         
 
         // gestion de la modification de la quantité d'un article dans le panier
 
@@ -57,7 +46,6 @@ const displayCart = storedProducts => {
                     let id = article.dataset.id;
                     let color = article.dataset.color;
                     let indexItem = items.findIndex(item => item.id === id && item.color === color);
-                    console.log(indexItem);
 
                     // modification de la quantité du produit dans le tableau items
                     items[indexItem].quantity = quantity;
@@ -67,12 +55,9 @@ const displayCart = storedProducts => {
 
                     // mise à jour du panier dans le localStorage
                     storedProducts[indexItem].quantity = quantity;
-                    console.log('storedProducts', storedProducts);
                     setProductsInLocalStorage(storedProducts);                    
                     
                     alert("Panier mis à jour");
-
-                    
 
                 } else {
                     alert("Veuillez choisir un nombre d'article(s) entre 1 et 100");
@@ -85,8 +70,8 @@ const displayCart = storedProducts => {
 
         // gestion de la suppression d'un article dans le panier (clic sur bouton 'Supprimer')
 
-        document.querySelectorAll('.deleteItem').forEach(input => {
-            input.addEventListener('click', e => {
+        document.querySelectorAll('.deleteItem').forEach(btn => {
+            btn.addEventListener('click', e => {
 
                 let article = e.target.closest('article');
 
@@ -108,14 +93,6 @@ const displayCart = storedProducts => {
 
 let isCartQuantityValid = true; 
 displayCart(getProductsFromLocalStorage());
-
-// on vérifie si le panier existe dans le localStorage
-
-// if (isKeyInLocalStorage('cart')) {
-//     displayCart(getProductsFromLocalStorage());
-// } else {
-//     // updateDataInLocalStorage('cart', []);
-// }
 
 // récupère les données de tous les produits depuis l'API
 
@@ -152,8 +129,6 @@ const createCartItem = item => {
     `;
 }
 
-// displayCart(storedProducts);
-
 // calcule la quantité et le prix total de la commande
 
 const getTotal = items => {
@@ -181,17 +156,14 @@ const deleteArticle = (article, items, storedProducts) => {
     let id = article.dataset.id;
     let color = article.dataset.color;
     let indexItem = items.findIndex(item => item.id === id && item.color === color);
-    console.log(indexItem);
 
     // suppression du produit du tableau items à l'index correspondant
     items.splice(indexItem, 1);
-    console.log(items);
 
     // recalcul des totaux après suppression d'un produit
     getTotal(items);
 
     // supprimer le produit dans le LocalStorage
-    console.log('storedProducts', storedProducts);
     storedProducts.splice(indexItem, 1);
     setProductsInLocalStorage(storedProducts);
 }
@@ -215,7 +187,8 @@ document.querySelector('form').addEventListener('submit', e => {
             const products = getProductsFromLocalStorage().map(product => product.id);
             console.log(products);
 
-
+            getOrderId(contact, products)
+                .then(orderId => goToConfirmation(orderId))
 
         } else {
             console.log('!!!!!!!!! formulaire pas valide !!!!!!!!!');
@@ -229,6 +202,8 @@ document.querySelector('form').addEventListener('submit', e => {
 
 });
 
+// retourne un objet contact à partir des valeurs entrées dans le formulaire
+
 const getContact = () => {
 
     return {
@@ -239,6 +214,31 @@ const getContact = () => {
         email: document.getElementById('email').value.trim()
     }
 
+}
+
+// effectue une requête POST avec l'envoi d'un objet JSON contenant l'objet contact et le tableau de produits
+// retourne l'id de la commande 
+
+async function getOrderId(contact, products) {
+
+    try {
+        const orderData = {contact, products};
+        let respData = await postAPI(`${urlAPI}order`, orderData);
+        const orderId = respData.orderId;
+        console.log(orderId);
+        return orderId;
+
+    } catch (err) {
+        alert("Il y a un problème avec l'API");
+        console.log(err);
+    }
+
+}
+
+// redirige vers la page Confirmation avec l'id dans l'URL
+
+const goToConfirmation = orderId => {
+    window.location.href = `./confirmation.html?orderId=${orderId}`;
 }
 
 
