@@ -36,79 +36,50 @@ const isCartValid = () => {
 
 }
 
-// teste les données entrées dans le formulaire
+// ************ validation du formulaire de commande ************
 
-const validateContact = contact => {
+// vérifie si le prénom, le nom ou la ville est valide
 
-    let result = true;
-    
-    // document.getElementById('firstNameErrorMsg').textContent = isInputValid(contact.firstName, regName) ? "" : "Veuillez renseigner un prénom au bon format";
+const isNameValid = inputName => {
 
-    // document.getElementById('lastNameErrorMsg').textContent = isInputValid(contact.lastName, regName) ? "" : "Veuillez renseigner un nom de famille au bon format";
-
-    // document.getElementById('addressErrorMsg').textContent = isInputValid(contact.address, regAddress) ? "" : "Veuillez renseigner une adresse au bon format";
-
-    // document.getElementById('cityErrorMsg').textContent = isInputValid(contact.city, regName) ? "" : "Veuillez renseigner une ville au bon format";
-
-    // document.getElementById('emailErrorMsg').textContent = isInputValid(contact.email, regEmail) ? "" : "Veuillez renseigner une adresse email au bon format";
-
-    // return isInputValid(contact.firstName, regName) && isInputValid(contact.lastName, regName) && isInputValid(contact.address, regAddress) && isInputValid(contact.city, regName) && isInputValid(contact.email, regEmail); 
-
-    
-    const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
-    if(isInputValid(contact.firstName, regName)) {
-        firstNameErrorMsg.textContent = "";
+    if (/^[a-z\éèàêâîiïù\-' ]{1,30}$/i.test(inputName.value)) {
+        inputName.nextElementSibling.innerText = "";
+        return true;
     } else {
-        firstNameErrorMsg.textContent = "Veuillez renseigner un prénom au bon format";
-        result = false;
-    }
 
-    const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
-    if(isInputValid(contact.lastName, regName)) {
-        lastNameErrorMsg.textContent = "";
-    } else {
-        lastNameErrorMsg.textContent = "Veuillez renseigner un nom au bon format";
-        result = false;
+        if (inputName.name === "firstName") {
+            inputName.nextElementSibling.innerText = "veuillez entrer un prénom au bon format";
+        } else if (inputName.name === "lastName") {
+            inputName.nextElementSibling.innerText = "veuillez entrer un nom au bon format";
+        } else if (inputName.name === "city") {
+            inputName.nextElementSibling.innerText = "veuillez entrer une ville au bon format";
+        }
+        return false;
     }
-    
-    const addressErrorMsg = document.getElementById('addressErrorMsg');
-    if(isInputValid(contact.address, regAddress)) {
-        addressErrorMsg.textContent = "";
-    } else {
-        addressErrorMsg.textContent = "Veuillez renseigner une adresse au bon format";
-        result = false;
-    }
-
-    const cityErrorMsg = document.getElementById('cityErrorMsg');
-    if(isInputValid(contact.city, regName)) {
-        cityErrorMsg.textContent = "";
-    } else {
-        cityErrorMsg.textContent = "Veuillez renseigner une ville au bon format";
-        result = false;
-    }
-
-    const emailErrorMsg = document.getElementById('emailErrorMsg');
-    if(isInputValid(contact.email, regEmail)) {
-        emailErrorMsg.textContent = "";
-    } else {
-        emailErrorMsg.textContent = "Veuillez entrer une adresse email au bon format";
-        result = false;
-    }
-
-    return result;
-
 }
 
-// teste une valeur entrée dans le formulaire au moyen d'une expression régulière
+// vérifie si l'adresse est valide
 
-const isInputValid = (value, reg) => {
-    return reg.test(value);
+const isAddressValid = inputAddress => {
+
+    if (/^[a-z\éèàêâîiïù\d\-' ]{5,50}$/i.test(inputAddress.value)) {
+        inputAddress.nextElementSibling.innerText = "";
+        return true;
+    } else {
+        inputAddress.nextElementSibling.innerText = "veuillez entrer une adresse au bon format";
+        return false;
+    }
 }
 
-// expressions régulières pour tester les champs du forumulaire
+// vérifie si l'adresse email est valide
 
-const regName = /^[a-z\éèàêâîiïù\-' ]{1,30}$/i;
+const isEmailValid = inputEmail => {
 
-const regEmail = /^([a-z\d\._-]+)@([a-z\d_-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i;
-
-const regAddress = /^[a-z\éèàêâîiïù\d\-' ]{5,50}$/i;
+    if (/^([a-z\d\._-]+)@([a-z\d_-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i.test(inputEmail.value)) {
+        inputEmail.nextElementSibling.innerText = "";
+        return true;
+    } else {
+        inputEmail.nextElementSibling.innerText = "veuillez entrer une adresse au bon format";
+        return false;
+    }
+}

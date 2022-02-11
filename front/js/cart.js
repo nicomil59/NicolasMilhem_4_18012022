@@ -1,3 +1,5 @@
+// ************ gestion de l'affichage du panier ************
+
 // affiche le panier
 
 const displayCart = storedProducts => {
@@ -168,27 +170,76 @@ const deleteArticle = (article, items, storedProducts) => {
     setProductsInLocalStorage(storedProducts);
 }
 
-// gestion du formulaire de commande
+// ************ gestion du formulaire de commande ************
 
-document.querySelector('form').addEventListener('submit', e => {
+// gestion de la validation des champs du formulaire
+
+const form = document.querySelector('form.cart__order__form');
+
+console.log(form)
+
+form.firstName.addEventListener('change', () => {
+    isNameValid(form.firstName);
+});
+
+form.lastName.addEventListener('change', () => {
+    isNameValid(form.lastName);
+});
+
+form.address.addEventListener('change', () => {
+    isAddressValid(form.address);
+});
+
+form.city.addEventListener('change', () => {
+    isNameValid(form.city);
+});
+
+form.email.addEventListener('change', () => {
+    isEmailValid(form.email)
+});
+
+// gestion de la soumission du formulaire
+
+form.addEventListener('submit', e => {
 
     e.preventDefault();
 
+    // Si le panier est valide, on vérifie si le formulaire est valide
+    
     if(isCartValid()) {
         
         console.log('panier valide');
 
-        const contact = getContact();
-        console.log(contact);
+        // si le formulaire est valide, je crée un objet contact à partir des données
+        // de celui-ci
 
-        if(validateContact(contact)) {
+        if(isNameValid(form.firstName) && isNameValid(form.lastName) && isNameValid(form.city) && isAddressValid(form.address) && isEmailValid(form.email)) {
+            
             console.log('*** formulaire valide ***');
+
+            // création de l'objet contact
+
+            const contact = getContact();
+            console.log(contact);
+
+            // création du tableau avec les id des produits depuis le localStorage
 
             const products = getProductsFromLocalStorage().map(product => product.id);
             console.log(products);
 
+            // récupération de l'id de commande
+
             getOrderId(contact, products)
-                .then(orderId => goToConfirmation(orderId))
+                .then(orderId => {
+
+                    // suppression du panier dans le localStorage
+
+                    deleteProductsInLocalStorage();
+
+                    // redirection vers la page Confirmation
+
+                    goToConfirmation(orderId);
+                })
 
         } else {
             console.log('!!!!!!!!! formulaire pas valide !!!!!!!!!');
@@ -202,16 +253,16 @@ document.querySelector('form').addEventListener('submit', e => {
 
 });
 
-// retourne un objet contact à partir des valeurs entrées dans le formulaire
+// retourne un objet contact à partir des données entrées dans le formulaire
 
 const getContact = () => {
 
     return {
-        firstName: document.getElementById('firstName').value.trim(),
-        lastName : document.getElementById('lastName').value.trim(),
-        address: document.getElementById('address').value.trim(),
-        city: document.getElementById('city').value.trim(),
-        email: document.getElementById('email').value.trim()
+        firstName: form.firstName.value.trim(),
+        lastName : form.lastName.value.trim(),
+        address: form.address.value.trim(),
+        city: form.city.value.trim(),
+        email: form.email.value.trim()
     }
 
 }
