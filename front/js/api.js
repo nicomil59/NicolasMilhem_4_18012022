@@ -1,6 +1,6 @@
 const urlAPI = 'http://localhost:3000/api/products/';
 
-// charge l'API
+// Effectue requête GET pour charger l'API
 
 async function loadAPI(url) {
 
@@ -13,7 +13,7 @@ async function loadAPI(url) {
     }
 }
 
-// effectue requête POST sur l'API
+// Effectue requête POST sur l'API
 
 async function postAPI(url, data) {
 

@@ -1,6 +1,6 @@
-// crée le template d'une card représentant un produit
+// Crée le template d'une card représentant un produit
 
-function createProductCard(product) {
+const createProductCard = product => {
     return `
     <a href="./product.html?id=${product._id}">
         <article>
@@ -12,9 +12,9 @@ function createProductCard(product) {
     `;
 }
 
-// affiche l'ensemble des produits
+// Affiche l'ensemble des produits
 
-function displayProducts(products) {
+const displayProducts = products => {
 
     let html = '';
     products.forEach(product => {
@@ -24,7 +24,7 @@ function displayProducts(products) {
     document.getElementById('items').innerHTML = html;
 }
 
-// récupère les produits et les affiche
+// Récupère les produits et les affiche
 
 async function getAllProducts() {
     try {

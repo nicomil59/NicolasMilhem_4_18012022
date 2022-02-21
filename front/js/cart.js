@@ -1,6 +1,6 @@
-// ************ gestion de l'affichage du panier ************
+// ************ Gestion de l'affichage du panier ************
 
-// affiche le panier
+// Affiche le panier
 
 const displayCart = storedProducts => {
 
@@ -33,44 +33,46 @@ const displayCart = storedProducts => {
         
         getTotal(items);
 
-        // gestion de la modification de la quantité d'un article dans le panier
+        // Gestion de la modification de la quantité d'un article dans le panier
 
         document.querySelectorAll('.itemQuantity').forEach(input => {
+            
+            let oldValue = parseInt(input.value);
+
             input.addEventListener('change', e => {
                 let article = e.target.closest('article');
                 let quantity = parseInt(e.target.value);
 
                 if (isQuantityValid(quantity)) {
                     
-                    isCartQuantityValid = true;
-
-                    // recherche de l'index de l'article pour lequel on modifie la quantité
+                    // Recherche de l'index de l'article pour lequel on modifie la quantité
                     let id = article.dataset.id;
                     let color = article.dataset.color;
                     let indexItem = items.findIndex(item => item.id === id && item.color === color);
 
-                    // modification de la quantité du produit dans le tableau items
+                    // Modification de la quantité du produit dans le tableau items
                     items[indexItem].quantity = quantity;
 
-                    // mise à jour prix total suite modification quantité
+                    // Mise à jour prix total suite modification quantité
                     getTotal(items);                    
 
-                    // mise à jour du panier dans le localStorage
+                    // Mise à jour du panier dans le localStorage
                     storedProducts[indexItem].quantity = quantity;
-                    setProductsInLocalStorage(storedProducts);                    
-                    
+                    setProductsInLocalStorage(storedProducts);
+
+                    oldValue = parseInt(input.value);
                     alert("Panier mis à jour");
 
                 } else {
+                    input.value = oldValue;
                     alert("Veuillez choisir un nombre d'article(s) entre 1 et 100");
-                    isCartQuantityValid = false;
                 }
 
                 
             })
         });
 
-        // gestion de la suppression d'un article dans le panier (clic sur bouton 'Supprimer')
+        // Gestion de la suppression d'un article dans le panier (clic sur bouton 'Supprimer')
 
         document.querySelectorAll('.deleteItem').forEach(btn => {
             btn.addEventListener('click', e => {
@@ -91,19 +93,17 @@ const displayCart = storedProducts => {
     
 }
 
-// on affiche le contenu du panier à partir des produits stockés dans le LocalStorage
-
-let isCartQuantityValid = true; 
+// On affiche le contenu du panier à partir des produits stockés dans le LocalStorage
 displayCart(getProductsFromLocalStorage());
 
-// récupère les données de tous les produits depuis l'API
+// Récupère les données de tous les produits depuis l'API
 
 async function getProductsFromAPI() {
-    return await loadAPI(`${urlAPI}`);
+    return await loadAPI(urlAPI);
 }
 
 
-// crée une ligne correspondante à un article dans le panier
+// Crée une ligne correspondante à un article dans le panier
 
 const createCartItem = item => {
     return `
@@ -131,7 +131,7 @@ const createCartItem = item => {
     `;
 }
 
-// calcule la quantité et le prix total de la commande
+// Calcule la quantité et le prix total de la commande
 
 const getTotal = items => {
 
@@ -147,36 +147,34 @@ const getTotal = items => {
     document.getElementById('totalPrice').textContent = totalPrice;
 }
 
-// supprime un article du panier de commande
+// Supprime un article du panier de commande
 
 const deleteArticle = (article, items, storedProducts) => {
     
-    // suppression dans le DOM
+    // Suppression dans le DOM
     article.remove();
                     
-    // recherche de l'index du produit à supprimer
+    // Recherche de l'index du produit à supprimer
     let id = article.dataset.id;
     let color = article.dataset.color;
     let indexItem = items.findIndex(item => item.id === id && item.color === color);
 
-    // suppression du produit du tableau items à l'index correspondant
+    // Suppression du produit du tableau items à l'index correspondant
     items.splice(indexItem, 1);
 
-    // recalcul des totaux après suppression d'un produit
+    // Recalcul des totaux après suppression d'un produit
     getTotal(items);
 
-    // supprimer le produit dans le LocalStorage
+    // Supprime le produit dans le LocalStorage
     storedProducts.splice(indexItem, 1);
     setProductsInLocalStorage(storedProducts);
 }
 
-// ************ gestion du formulaire de commande ************
+// ************ Gestion du formulaire de commande ************
 
-// gestion de la validation des champs du formulaire
+// Gestion de la validation des champs du formulaire
 
 const form = document.querySelector('form.cart__order__form');
-
-console.log(form)
 
 form.firstName.addEventListener('change', () => {
     isNameValid(form.firstName);
@@ -198,7 +196,7 @@ form.email.addEventListener('change', () => {
     isEmailValid(form.email)
 });
 
-// gestion de la soumission du formulaire
+// Gestion de la soumission du formulaire
 
 form.addEventListener('submit', e => {
 
@@ -208,41 +206,35 @@ form.addEventListener('submit', e => {
     
     if(isCartValid()) {
         
-        console.log('panier valide');
-
-        // si le formulaire est valide, je crée un objet contact à partir des données
+        // Si le formulaire est valide, je crée un objet contact à partir des données
         // de celui-ci
 
         if(isNameValid(form.firstName) && isNameValid(form.lastName) && isNameValid(form.city) && isAddressValid(form.address) && isEmailValid(form.email)) {
             
-            console.log('*** formulaire valide ***');
-
-            // création de l'objet contact
+            // Création de l'objet contact
 
             const contact = getContact();
-            console.log(contact);
 
-            // création du tableau avec les id des produits depuis le localStorage
+            // Création du tableau avec les id des produits depuis le localStorage
 
             const products = getProductsFromLocalStorage().map(product => product.id);
-            console.log(products);
 
-            // récupération de l'id de commande
+            // Récupération de l'id de commande
 
             getOrderId(contact, products)
                 .then(orderId => {
 
-                    // suppression du panier dans le localStorage
+                    // Suppression du panier dans le localStorage
 
                     deleteProductsInLocalStorage();
 
-                    // redirection vers la page Confirmation
+                    // Redirection vers la page Confirmation
 
                     goToConfirmation(orderId);
                 })
 
         } else {
-            console.log('!!!!!!!!! formulaire pas valide !!!!!!!!!');
+            console.log('formulaire pas valide');
         }
 
 
@@ -253,7 +245,7 @@ form.addEventListener('submit', e => {
 
 });
 
-// retourne un objet contact à partir des données entrées dans le formulaire
+// Retourne un objet contact à partir des données entrées dans le formulaire
 
 const getContact = () => {
 
@@ -267,8 +259,8 @@ const getContact = () => {
 
 }
 
-// effectue une requête POST avec l'envoi d'un objet JSON contenant l'objet contact et le tableau de produits
-// retourne l'id de la commande 
+// Effectue une requête POST avec l'envoi d'un objet JSON contenant l'objet contact et le tableau de produits
+// Retourne l'id de la commande 
 
 async function getOrderId(contact, products) {
 
@@ -276,7 +268,6 @@ async function getOrderId(contact, products) {
         const orderData = {contact, products};
         let respData = await postAPI(`${urlAPI}order`, orderData);
         const orderId = respData.orderId;
-        console.log(orderId);
         return orderId;
 
     } catch (err) {
@@ -286,7 +277,7 @@ async function getOrderId(contact, products) {
 
 }
 
-// redirige vers la page Confirmation avec l'id dans l'URL
+// Redirige vers la page Confirmation avec l'id dans l'URL
 
 const goToConfirmation = orderId => {
     window.location.href = `./confirmation.html?orderId=${orderId}`;

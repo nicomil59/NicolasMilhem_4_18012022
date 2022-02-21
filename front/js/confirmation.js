@@ -1,11 +1,10 @@
-// récupère l'id de commande et l'affiche sur la page
+// Récupère l'id de commande et l'affiche sur la page
 
 const displayOrderId = () => {
     
-    const url = new URL(window.location.href);
-    const searchParams = new URLSearchParams(url.search);
+    const search = window.location.search;
+    const searchParams = new URLSearchParams(search);
     const orderId = searchParams.get('orderId');
-    console.log(orderId);
     document.getElementById('orderId').textContent = orderId;
     
 }

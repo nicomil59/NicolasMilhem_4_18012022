@@ -1,8 +1,13 @@
-const url = new URL(window.location.href);
-const searchParams = new URLSearchParams(url.search);
+// On récupère la chaîne de requête
+const search = window.location.search;
+
+// On crée un objet URLSearchParams pour travailler sur la chaîne de requête
+const searchParams = new URLSearchParams(search);
+
+// Grâce à la méthode get() de URLSearchParams, on récupère l'id qu'on affecte à productId
 let productId = searchParams.get('id');
 
-// récupère les infos sur le produit à partir de son id et l'affiche
+// Récupère les infos sur le produit à partir de son id et l'affiche
 
 async function getProduct(id) {
 
@@ -17,7 +22,7 @@ async function getProduct(id) {
 
 }
 
-// affiche les infos du produit
+// Affiche les infos du produit
 
 const showProductDetails = product => {
     const image = document.createElement('img');
@@ -41,7 +46,7 @@ const showProductDetails = product => {
 
 getProduct(productId);
 
-// gestion clic sur bouton 'ajouter au panier'
+// Gestion clic sur bouton 'ajouter au panier'
 
 document.getElementById('addToCart').addEventListener('click', () => {
 
@@ -50,8 +55,6 @@ document.getElementById('addToCart').addEventListener('click', () => {
         color: document.getElementById('colors').value,
         quantity: parseInt(document.getElementById('quantity').value)
     }
-
-    console.log(productToAdd);
 
     if (isQuantityValid(productToAdd.quantity) && isColorValid(productToAdd.color)) {
         addProductToCart(productToAdd);
@@ -66,38 +69,30 @@ document.getElementById('addToCart').addEventListener('click', () => {
     }
 });
 
-// ajoute produit au panier
+// Ajoute produit au panier
 
 const addProductToCart = productToAdd => {
     
-    // let listOfProducts = [];
     let listOfProducts = getProductsFromLocalStorage();
-
-    // if (isKeyInLocalStorage('cart')) {
-    //     console.log('je récupère le panier depuis le LocalStorage');
-    //     listOfProducts = getProductsFromLocalStorage();
-    // } else {
-    //     console.log('création du panier');
-    // }
-
     updateCart(listOfProducts, productToAdd);
-    console.log("panier mis à jour", listOfProducts);
 }
 
-// met à jour la liste des produits et par conséquent le panier avec le produit ajouté
+// Met à jour la liste des produits du panier avec le produit ajouté
 
 const updateCart = (listOfProducts, productToAdd) => {
     
+    // Recherche si le produit avec les mêmes références (id, couleur) est déjà présent dans le panier
     const index = listOfProducts.findIndex(product => productToAdd.id === product.id && productToAdd.color === product.color);
     
     if(index < 0) {
-        console.log('produit pas trouvé');
+        // Le produit avec les mêmes références n'est pas présent dans le panier, donc on l'ajoute à la liste des produits
         listOfProducts.push(productToAdd);
     } else {
-        console.log('produit déjà dans le panier');
+        // Le produit est déjà présent, on incrémente sa quantité
         listOfProducts[index].quantity += productToAdd.quantity;
     }
 
+    // Mise à jour de la liste des produits dans le localStorage
     setProductsInLocalStorage(listOfProducts);
     
 }

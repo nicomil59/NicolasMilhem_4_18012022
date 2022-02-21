@@ -1,4 +1,4 @@
-// vérifie si la quantité du produit est correcte
+// Vérifie si la quantité du produit est correcte
 
 const isQuantityValid = quantity => {
 
@@ -6,7 +6,7 @@ const isQuantityValid = quantity => {
 
 }
 
-// vérifie si une couleur du produit a été sélectionnée
+// Vérifie si une couleur du produit a été sélectionnée
 
 const isColorValid = color => {
 
@@ -14,7 +14,7 @@ const isColorValid = color => {
     
 }
 
-// vérifie si la commande est conforme (pas de panier vide ou de quantité non conforme)
+// Vérifie si la commande est conforme (pas de panier vide)
 
 const isCartValid = () => {
 
@@ -27,18 +27,13 @@ const isCartValid = () => {
         result = false;
     }
 
-    if(!isCartQuantityValid) {
-        alert('Un ou des articles ne possèdent pas la bonne quantité !');
-        result = false;
-    }
-
     return result;
 
 }
 
 // ************ validation du formulaire de commande ************
 
-// vérifie si le prénom, le nom ou la ville est valide
+// Vérifie si le prénom, le nom ou la ville est valide
 
 const isNameValid = inputName => {
 
@@ -58,7 +53,7 @@ const isNameValid = inputName => {
     }
 }
 
-// vérifie si l'adresse est valide
+// Vérifie si l'adresse est valide
 
 const isAddressValid = inputAddress => {
 
@@ -71,7 +66,7 @@ const isAddressValid = inputAddress => {
     }
 }
 
-// vérifie si l'adresse email est valide
+// Vérifie si l'adresse email est valide
 
 const isEmailValid = inputEmail => {
 
