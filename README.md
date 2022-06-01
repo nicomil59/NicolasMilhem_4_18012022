@@ -1,6 +1,6 @@
 # Kanap #
 
-Front et Back du site Kanap.
+Front et Back du site Kanap (site de e-commerce).
 
 ## Mission ##
 
