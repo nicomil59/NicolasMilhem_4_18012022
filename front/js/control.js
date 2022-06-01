@@ -2,6 +2,10 @@
 
 const isQuantityValid = quantity => {
 
+    console.log(typeof quantity);
+    
+    if(isNaN(quantity)) return false;
+    
     return quantity < 1 || quantity > 100 ? false : true;
 
 }
